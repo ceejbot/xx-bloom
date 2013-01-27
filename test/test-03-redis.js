@@ -46,6 +46,17 @@ describe('StorableFilter()', function()
 		});
 	});
 
+	describe('optimalForSize()', function()
+	{
+		it('returns something of the right size', function()
+		{
+			var filter = StorableFilter.optimalForSize(148, 0.005, { key: 'passthru'});
+			filter.bits.should.equal(1632);
+			filter.hashes.should.equal(8);
+			filter.key.should.equal('passthru');
+		});
+	});
+
 	describe('setbit() and getbit()', function()
 	{
 		it('sets the specified bit', function(done)
