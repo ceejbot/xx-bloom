@@ -1,4 +1,4 @@
-Yet another Bloom filter implementation for node.js. Backed by [Xxhash](), which is a fast general-purpose hash. Three variations are provided: a straight Bloom filter, a counting filter (from which items can be removed), and a straight Bloom filter backed by redis. The first two have synchronous APIs. The redis one perforce requires callbacks.
+Yet another Bloom filter implementation for node.js. Backed by [Xxhash](https://code.google.com/p/xxhash/) via [node-xxhash](https://github.com/mscdex/node-xxhash). Xxhash is a fast general-purpose hash, which is all a bloom filter needs. Three variations are provided: a straight Bloom filter, a counting filter (from which items can be removed), and a straight Bloom filter backed by redis. The first two have synchronous APIs. The redis one perforce requires callbacks.
 
 Not published on npm yet because I'm not yet satisfied with the cleanliness of the API.
 
