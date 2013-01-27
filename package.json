@@ -1,0 +1,33 @@
+{
+	"name": "bloomxx",
+	"version": "0.0.1",
+	"description": "bloom filters backed by xxhash",
+	"main": "index.js",
+	"directories":
+	{
+		"test": "test"
+	},
+	"scripts": { "test": "mocha -R spec test/*.js" },
+	"repository": "",
+	"keywords":
+	[
+		"bloom",
+		"bloom-filter",
+		"counting-filter",
+		"hash",
+		"bitmap",
+		"xxhash"
+	],
+	"devDependencies":
+	{
+		"chai": "*",
+		"mocha": "*"
+	},
+	"dependencies":
+	{
+		"redis": "*",
+		"xxhash": "*"
+	},
+	"author": "C J Silverio <ceejceej@gmail.com>",
+	"license": "BSD"
+}
