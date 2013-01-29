@@ -25,6 +25,7 @@
 	},
 	"dependencies":
 	{
+		"hiredis": "*",
 		"redis": "*",
 		"xxhash": "*"
 	},
