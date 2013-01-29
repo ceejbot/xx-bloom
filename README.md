@@ -70,7 +70,7 @@ StorableFilter.createOrRead({
 
 ## TODO
 
-* A convenient way to make an optimally-sized storable filter.
+* A convenient way to make an optimally-sized storable filter. DONE
 * Clean up constructors & the name of the optimal-sizer thingie.
 
 ## Licence 

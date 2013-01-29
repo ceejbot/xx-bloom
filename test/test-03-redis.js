@@ -105,32 +105,6 @@ describe('StorableFilter()', function()
 		});
 	});
 
-	describe('clear()', function()
-	{
-		it('clears all set bits', function(done)
-		{
-			StorableFilter.createOrRead({ key: 'test' }, function(err, filter)
-			{
-				should.not.exist(err);
-				filter.redis.get(filter.key, function(err, initial)
-				{
-					should.not.exist(err);
-					filter.clear(function(err)
-					{
-						should.not.exist(err);
-						filter.redis.get(filter.key, function(err, cleared)
-						{
-							should.not.exist(err);
-							initial.should.not.equal(cleared);
-							cleared.should.eql('0');
-							done();
-						});
-					});
-				});
-			});
-		});
-	});
-
 	describe('add()', function()
 	{
 		it('can store buffers', function(done)
@@ -203,11 +177,29 @@ describe('StorableFilter()', function()
 
 	describe('clear()', function()
 	{
-		it('clears the filter', function()
+		it('clears all set bits', function(done)
 		{
+			StorableFilter.createOrRead({ key: 'test' }, function(err, filter)
+			{
+				should.not.exist(err);
+				filter.redis.hvals(filter.key, function(err, initial)
+				{
+					should.not.exist(err);
+					filter.clear(function(err)
+					{
+						should.not.exist(err);
+						filter.redis.hvals(filter.key, function(err, cleared)
+						{
+							should.not.exist(err);
+							initial.should.not.equal(cleared);
+							cleared[0].should.eql('0');
+							done();
+						});
+					});
+				});
+			});
 		});
 	});
-
 
 	describe('del()', function()
 	{
