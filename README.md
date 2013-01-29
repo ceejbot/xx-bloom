@@ -2,6 +2,8 @@ Yet another Bloom filter implementation for node.js. Backed by [Xxhash](https://
 
 Not published on npm yet because I'm not yet satisfied with the cleanliness of the API.
 
+[![Build Status](https://secure.travis-ci.org/ceejbot/xx-bloom.png)](http://travis-ci.org/ceejbot/xx-bloom)
+
 ## Usage
 
 ### BloomFilter
