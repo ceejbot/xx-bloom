@@ -18,14 +18,14 @@ describe('StorableFilter()', function()
 		{
 			StorableFilter.createOrRead({
 				key: 'test',
-				bits: 128,
-				hashes: 4
+				bits: 1632,
+				hashes: 8
 			}, function(err, filter)
 			{
 				should.not.exist(err);
-				filter.bits.should.equal(128);
-				filter.hashes.should.equal(4);
-				filter.seeds.length.should.equal(4);
+				filter.bits.should.equal(1632);
+				filter.hashes.should.equal(8);
+				filter.seeds.length.should.equal(8);
 				filter.key.should.equal('test');
 				done();
 			});
@@ -37,20 +37,20 @@ describe('StorableFilter()', function()
 			{
 				should.not.exist(err);
 				filter.should.be.an('object');
-				filter.bits.should.equal(128);
-				filter.hashes.should.equal(4);
-				filter.seeds.length.should.equal(4);
+				filter.bits.should.equal(1632);
+				filter.hashes.should.equal(8);
+				filter.seeds.length.should.equal(8);
 				filter.key.should.equal('test');
 				done();
 			});
 		});
 	});
 
-	describe('optimalForSize()', function()
+	describe('createOptimal()', function()
 	{
 		it('returns something of the right size', function()
 		{
-			var filter = StorableFilter.optimalForSize(148, 0.005, { key: 'passthru'});
+			var filter = StorableFilter.createOptimal(148, 0.005, { key: 'passthru'});
 			filter.bits.should.equal(1632);
 			filter.hashes.should.equal(8);
 			filter.key.should.equal('passthru');
@@ -146,7 +146,7 @@ describe('StorableFilter()', function()
 		{
 			StorableFilter.createOrRead({ key: 'test' }, function(err, filter)
 			{
-				filter.add(['cat', 'dog', 'wallaby'], function(err)
+				filter.add(['cat', 'dog', new Buffer('wallaby')], function(err)
 				{
 					should.not.exist(err);
 					filter.has('cat', function(err, has)
@@ -159,7 +159,7 @@ describe('StorableFilter()', function()
 			});
 		});
 
-		it('can add a hundred random items', function()
+		it('can add a hundred random items', function(done)
 		{
 			var alpha = '0123456789abcdefghijklmnopqrstuvwxyz';
 			function randomWord(length)
@@ -171,8 +171,25 @@ describe('StorableFilter()', function()
 
 				return result;
 			}
-		});
 
+			var wordlist = [];
+			for (var i = 0; i < 100; i++)
+				wordlist.push(randomWord());
+
+			StorableFilter.createOrRead({ key: 'test' }, function(err, filter)
+			{
+				filter.add(wordlist, function(err)
+				{
+					should.not.exist(err);
+					filter.has(wordlist[50], function(err, has)
+					{
+						should.not.exist(err);
+						has.should.be.ok;
+						done();
+					});
+				});
+			});
+		});
 	});
 
 	describe('clear()', function()
@@ -203,6 +220,16 @@ describe('StorableFilter()', function()
 
 	describe('del()', function()
 	{
+		it('can delete a filter', function(done)
+		{
+			var filter = new StorableFilter({key: 'passthru'});
+			filter.del(function(err)
+			{
+				should.not.exist(err);
+				done();
+			});
+		});
+
 		it('deletes the relevant keys in redis', function(done)
 		{
 			StorableFilter.createOrRead({ key: 'test' }, function(err, filter)
@@ -211,7 +238,17 @@ describe('StorableFilter()', function()
 				filter.del(function(err)
 				{
 					should.not.exist(err);
-					done();
+					filter.redis.exists('test', function(err, exists)
+					{
+						should.not.exist(err);
+						exists.should.equal(0);
+						filter.redis.exists('test:meta', function(err, exists)
+						{
+							should.not.exist(err);
+							exists.should.equal(0);
+							done();							
+						});
+					});
 				});
 			});
 		});

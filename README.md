@@ -8,17 +8,29 @@ Not published on npm yet because I'm not yet satisfied with the cleanliness of t
 
 ### BloomFilter
 
-To create a filter:
+To create a filter, pass an options hash to the constructor:
 
-`filter = new BloomFilter(hashCount, size, optional-hash-seeds);`
+```javascript
+var options =
+{
+	bits: 1024,
+	hashes: 7,
+	seeds: [1, 2, 3, 4, 5, 6, 7]
+};
+filter = new BloomFilter(options);
+```
 
-You can pass in seeds for the hash functions if you like, or they'll be randomly generated.
+You can pass in seeds for the hash functions if you like, or they'll be randomly generated. Seeds must be integers.
+
+### createOptimal()
 
 To create a filter optimized for the number of items you'll be storing and a given error rate:
 
-`filter = BloomFilter.optimalForSize(estimatedItemCount, optionalErrorRate);`
+`filter = BloomFilter.createOptimal(estimatedItemCount, errorRate);`
 
-The error rate defaults to 0.005 or 0.5%.
+The error rate parameter is optional. It defaults to 0.005, or a 0.5% rate.
+
+### add()
 
 `filter.add('cat');`
 
@@ -26,9 +38,13 @@ Adds the given item to the filter. Can also accept buffers and arrays containing
 
 `filter.add(['cat', 'dog', 'coati', 'red panda']);`
 
+### has()
+
 To test for membership:
 
 `filter.has('dog');`
+
+### clear()
 
 To clear the filter:
 
@@ -38,8 +54,10 @@ To clear the filter:
 
 Uses about 8 times as much space as the regular filter. Basic usage is exactly the same as the plain Bloom filter:
 
-`filter = new CountingFilter(hashCount, size, optional-hash-seeds);`
-`filter = CountingFilter.optimalForSize(estimatedItemCount, optionalErrorRate);`
+```javascript
+filter = new CountingFilter({ hashes: 8, bits: 1024 });`
+filter2 = CountingFilter.optimalForSize(estimatedItemCount, optionalErrorRate);
+```
 
 Add a list, test for membership, then remove:
 
@@ -50,14 +68,18 @@ filter.remove('cat');
 filter.has('cat'); // returns false
 ```
 
+The counting filter tracks its overflow count in `filter.overflow`. Overflow will be non-zero if any bit has been set more than 255 times. Once the filter has overflowed, removing items is no longer reliable.
+
 ### StorableFilter
+
+This is a plain vanilla bloom filter backed by redis. Its api is asychronous.
 
 ```javascript
 StorableFilter.createOrRead({
-		key: 'test',
-		bits: 1024,
-		hashes: 8,
-		redis: redis.createClient(port, host) 
+		key: 'cats', // the key used to store data in redis; will also set 'cats:meta'
+		bits: 1024,  // filter size in bits
+		hashes: 8,   // number of hash functions
+		redis: redis.createClient(port, host)  // redis client to use
 	}, function(err, filter)
 	{
 		filter.add(['cat', 'jaguar', 'lion', 'tiger', 'leopard'], function(err)
@@ -70,10 +92,25 @@ StorableFilter.createOrRead({
 	});
 ```
 
+The options hash can also specify `host` and `port`, which will be used to create a redis client. `createOrRead()` will attempt to find a filter saved at the given key and create one if it isn't found.
+
+### createOptimal(itemCount, errorRate, options)
+
+Returns a filter sized for the given item count and desired error rate, with other options as specified in the `options` hash.
+
+### clear(function(err) {})
+
+Clear all bits.
+
+### del(function(err) {})
+
+Delete the filter from redis.
+
 ## TODO
 
 * A convenient way to make an optimally-sized storable filter. DONE
-* Clean up constructors & the name of the optimal-sizer thingie.
+* Clean up constructors & the name of the optimal-sizer thingie. DONE
+* More docs. DONE
 
 ## Licence 
 

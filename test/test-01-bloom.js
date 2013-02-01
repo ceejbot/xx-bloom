@@ -20,7 +20,7 @@ describe('BloomFilter()', function()
 {
 	it('constructs a filter of the requested size', function()
 	{
-		var filter = new BloomFilter(4, 32);
+		var filter = new BloomFilter({ hashes: 4, bits: 32 });
 		assert.equal(filter.seeds.length, 4);
 		assert.equal(filter.bits, 32);
 		filter.bits.should.equal(32);
@@ -29,7 +29,7 @@ describe('BloomFilter()', function()
 
 	it('zeroes out its storage buffer', function()
 	{
-		var filter = new BloomFilter(3, 64);
+		var filter = new BloomFilter({ hashes: 3, bits: 64 });
 		for (var i = 0; i < filter.buffer.length; i++)
 			filter.buffer[i].should.equal(0);
 	});
@@ -38,30 +38,30 @@ describe('BloomFilter()', function()
 	{
 	});
 
-	describe('optimalForSize()', function()
+	describe('createOptimal()', function()
 	{
 		it('creates a filter with good defaults', function()
 		{
-			var filter = BloomFilter.optimalForSize(95);
+			var filter = BloomFilter.createOptimal(95);
 			filter.bits.should.equal(1048);
 			filter.hashes.should.equal(8);
 
-			filter = BloomFilter.optimalForSize(148);
+			filter = BloomFilter.createOptimal(148);
 			filter.bits.should.equal(1632);
 			filter.hashes.should.equal(8);
 
-			filter = BloomFilter.optimalForSize(10);
+			filter = BloomFilter.createOptimal(10);
 			filter.bits.should.equal(110);
 			filter.hashes.should.equal(8);
 		});
 
-		it('optimalForSize() lets you specify an error rate', function()
+		it('createOptimal() lets you specify an error rate', function()
 		{
-			var filter = BloomFilter.optimalForSize(20000);
+			var filter = BloomFilter.createOptimal(20000);
 			filter.bits.should.equal(220555);
 			var previous = filter.bits;
 
-			filter = BloomFilter.optimalForSize(20000, 0.2);
+			filter = BloomFilter.createOptimal(20000, 0.2);
 			assert.ok(filter.bits < previous, 'we used more bits for a higher error rate!');
 		});
 	});
@@ -70,7 +70,7 @@ describe('BloomFilter()', function()
 	{
 		it('sets the specified bit', function()
 		{
-			var filter = new BloomFilter(3, 16);
+			var filter = new BloomFilter({ hashes: 3, bits: 16 });
 
 			filter.setbit(0);
 			var val = filter.getbit(0);
@@ -92,7 +92,7 @@ describe('BloomFilter()', function()
 		{
 			var i, value;
 
-			var filter = new BloomFilter(3, 16);
+			var filter = new BloomFilter({ hashes: 3, bits: 16 });
 			assert.equal(filter.buffer.length, 2);
 
 			for (i = 0; i < 16; i++)
@@ -108,7 +108,7 @@ describe('BloomFilter()', function()
 		it('slides over into the next buffer slice when setting bits', function()
 		{
 			var val;
-			var filter = new BloomFilter(3, 64);
+			var filter = new BloomFilter({ hashes: 3, bits: 64 });
 
 			filter.setbit(8);
 			val = filter.buffer[1];
@@ -128,7 +128,7 @@ describe('BloomFilter()', function()
 	{
 		it('can store buffers', function()
 		{
-			var filter = new BloomFilter(4, 128);
+			var filter = new BloomFilter({ hashes: 4, bits: 128 });
 
 			hasBitsSet(filter.buffer).should.equal(0);
 			filter.add(new Buffer('cat'));
@@ -137,7 +137,7 @@ describe('BloomFilter()', function()
 
 		it('can store strings', function()
 		{
-			var filter = new BloomFilter(4, 128);
+			var filter = new BloomFilter({ hashes: 4, bits: 128 });
 			filter.add('cat');
 
 			hasBitsSet(filter.buffer).should.equal(1);
@@ -145,7 +145,7 @@ describe('BloomFilter()', function()
 
 		it('can store arrays of buffers or strings', function()
 		{
-			var filter = new BloomFilter(4, 128);
+			var filter = new BloomFilter({ hashes: 4, bits: 128 });
 			filter.add(['cat', 'dog', 'wallaby']);
 
 			hasBitsSet(filter.buffer).should.equal(1);
@@ -164,7 +164,7 @@ describe('BloomFilter()', function()
 				return result;
 			}
 
-			var filter = BloomFilter.optimalForSize(100);
+			var filter = BloomFilter.createOptimal(100);
 			var words = [];
 			for (var i = 0; i < 100; i++)
 			{
@@ -184,7 +184,7 @@ describe('BloomFilter()', function()
 	{
 		it('returns true when called on a stored item', function()
 		{
-			var filter = new BloomFilter(3, 16);
+			var filter = new BloomFilter({ hashes: 3, bits: 16 });
 			filter.add('cat');
 
 			hasBitsSet(filter.buffer).should.equal(1);
@@ -193,14 +193,14 @@ describe('BloomFilter()', function()
 
 		it('returns false for items not in the set (mostly)', function()
 		{
-			var filter = new BloomFilter(4, 50);
+			var filter = new BloomFilter({ hashes: 4, bits: 50 });
 			filter.add('cat');
 			filter.has('dog').should.not.be.ok;
 		});
 
 		it('responds appropriately for arrays of added items', function()
 		{
-			var filter = new BloomFilter(3, 128);
+			var filter = new BloomFilter({ hashes: 3, bits: 128 });
 			filter.add(['cat', 'dog', 'wallaby']);
 
 			filter.has('cat').should.equal(true);
@@ -214,7 +214,7 @@ describe('BloomFilter()', function()
 	{
 		it('clears the filter', function()
 		{
-			var filter = new BloomFilter(3, 128);
+			var filter = new BloomFilter({ hashes: 3, bits: 128 });
 			filter.add(['cat', 'dog', 'wallaby']);
 			hasBitsSet(filter.buffer).should.equal(1);
 

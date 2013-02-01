@@ -5,10 +5,12 @@
 	"main": "index.js",
 	"directories":
 	{
-		"test": "test"
+		"test": "./test",
+		"lib": "./lib"
 	},
 	"scripts": { "test": "mocha -R spec test/*.js" },
-	"repository": "",
+	"repository": "git://github.com/ceejbot/xx-bloom.git",
+	"bugs": "https://github.com/ceejbot/xx-bloom/issues",
 	"keywords":
 	[
 		"bloom",
