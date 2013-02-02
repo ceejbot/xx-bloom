@@ -24,7 +24,7 @@ You can pass in seeds for the hash functions if you like, or they'll be randomly
 
 ### createOptimal()
 
-To create a filter optimized for the number of items you'll be storing and a given error rate:
+To create a filter optimized for the number of items you'll be storing and a desired error rate:
 
 `filter = BloomFilter.createOptimal(estimatedItemCount, errorRate);`
 
@@ -56,7 +56,7 @@ Uses about 8 times as much space as the regular filter. Basic usage is exactly t
 
 ```javascript
 filter = new CountingFilter({ hashes: 8, bits: 1024 });`
-filter2 = CountingFilter.optimalForSize(estimatedItemCount, optionalErrorRate);
+filter2 = CountingFilter.createOptimal(estimatedItemCount, optionalErrorRate);
 ```
 
 Add a list, test for membership, then remove:
@@ -65,7 +65,7 @@ Add a list, test for membership, then remove:
 filter.add(['cat', 'dog', 'coati', 'red panda']);
 filter.has('cat'); // returns true
 filter.remove('cat');
-filter.has('cat'); // returns false
+filter.has('cat'); // returns false most of the time
 ```
 
 The counting filter tracks its overflow count in `filter.overflow`. Overflow will be non-zero if any bit has been set more than 255 times. Once the filter has overflowed, removing items is no longer reliable.
@@ -105,12 +105,6 @@ Clear all bits.
 ### del(function(err) {})
 
 Delete the filter from redis.
-
-## TODO
-
-* A convenient way to make an optimally-sized storable filter. DONE
-* Clean up constructors & the name of the optimal-sizer thingie. DONE
-* More docs. DONE
 
 ## Licence 
 
