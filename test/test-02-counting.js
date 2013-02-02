@@ -220,4 +220,20 @@ describe('CountingFilter()', function()
 				filter.buffer[i].should.equal(0);
 		});
 	});
+
+	describe('clear()', function()
+	{
+		it('clears the overflow counter', function()
+		{
+			var filter = new CountingFilter({ hashes: 3, bits: 16 });
+			filter.buffer[3] = 255;
+			filter.setbit(3);
+			filter.buffer[10] = 255;
+			filter.setbit(10);
+			filter.overflow.should.equal(2);
+			filter.clear();
+			filter.overflow.should.equal(0);
+		})
+	});
+
 });
