@@ -87,7 +87,7 @@ describe('CountingFilter()', function()
 			filter.buffer[10] = 255;
 			filter.setbit(10);
 			filter.overflow.should.equal(2);
-		})
+		});
 
 	});
 
@@ -233,7 +233,7 @@ describe('CountingFilter()', function()
 			filter.overflow.should.equal(2);
 			filter.clear();
 			filter.overflow.should.equal(0);
-		})
+		});
 	});
 
 });

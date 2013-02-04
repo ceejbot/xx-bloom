@@ -34,8 +34,13 @@ describe('BloomFilter()', function()
 			filter.buffer[i].should.equal(0);
 	});
 
-	it('uses passed-in seeds if provided TODO', function()
+	it('uses passed-in seeds if provided', function()
 	{
+		var filter = new BloomFilter({ bits: 256, seeds: [1, 2, 3, 4, 5]});
+		filter.hashes.should.equal(5);
+		filter.seeds.length.should.equal(5);
+		filter.seeds[0].should.equal(1);
+		filter.seeds[4].should.equal(5);
 	});
 
 	describe('createOptimal()', function()
