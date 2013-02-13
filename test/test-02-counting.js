@@ -89,6 +89,15 @@ describe('CountingFilter()', function()
 			filter.overflow.should.equal(2);
 		});
 
+		it('hasOverflow() returns true when filter has overflowed', function()
+		{
+			var filter = new CountingFilter({ hashes: 3, bits: 16 });
+			filter.hasOverflowed().should.equal(false);
+			filter.buffer[3] = 255;
+			filter.setbit(3);
+			filter.hasOverflowed().should.equal(true);
+		});
+
 	});
 
 	describe('unsetbit()', function()
@@ -233,6 +242,7 @@ describe('CountingFilter()', function()
 			filter.overflow.should.equal(2);
 			filter.clear();
 			filter.overflow.should.equal(0);
+			filter.hasOverflowed().should.equal(false);
 		});
 	});
 
