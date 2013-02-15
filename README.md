@@ -70,6 +70,13 @@ filter.has('cat'); // returns false most of the time
 
 The counting filter tracks its overflow count in `filter.overflow`. Overflow will be non-zero if any bit has been set more than 255 times. Once the filter has overflowed, removing items is no longer reliable.
 
+Check for overflow:
+
+```javascript
+filter.hasOverflowed(); // returns boolean
+filter.overflow; // integer count of number of times overflow occurred
+```
+
 ### RedisFilter
 
 This is a plain vanilla bloom filter backed by redis. Its api is asychronous.
