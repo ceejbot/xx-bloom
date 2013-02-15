@@ -70,12 +70,12 @@ filter.has('cat'); // returns false most of the time
 
 The counting filter tracks its overflow count in `filter.overflow`. Overflow will be non-zero if any bit has been set more than 255 times. Once the filter has overflowed, removing items is no longer reliable.
 
-### StorableFilter
+### RedisFilter
 
 This is a plain vanilla bloom filter backed by redis. Its api is asychronous.
 
 ```javascript
-StorableFilter.createOrRead({
+RedisFilter.createOrRead({
 		key: 'cats', // the key used to store data in redis; will also set 'cats:meta'
 		bits: 1024,  // filter size in bits
 		hashes: 8,   // number of hash functions
@@ -108,4 +108,4 @@ Delete the filter from redis.
 
 ## Licence 
 
-BSD.
+MIT.

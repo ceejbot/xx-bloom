@@ -5,18 +5,18 @@ var
 	assert = chai.assert,
 	expect = chai.expect,
 	should = chai.should(),
-	StorableFilter = require('../lib/redis'),
+	RedisFilter = require('../lib/redis'),
 	redis = require('redis')
 	;
 
-describe('StorableFilter()', function()
+describe('RedisFilter()', function()
 {
 
 	describe('createOrRead()', function()
 	{
 		it('responds with a filter with the specified options', function(done)
 		{
-			StorableFilter.createOrRead({
+			RedisFilter.createOrRead({
 				key: 'test',
 				bits: 1632,
 				hashes: 8
@@ -33,7 +33,7 @@ describe('StorableFilter()', function()
 
 		it('can read the stored filter from redis', function(done)
 		{
-			StorableFilter.createOrRead({ key: 'test' }, function(err, filter)
+			RedisFilter.createOrRead({ key: 'test' }, function(err, filter)
 			{
 				should.not.exist(err);
 				filter.should.be.an('object');
@@ -50,7 +50,7 @@ describe('StorableFilter()', function()
 	{
 		it('returns something of the right size', function()
 		{
-			var filter = StorableFilter.createOptimal(148, 0.005, { key: 'passthru'});
+			var filter = RedisFilter.createOptimal(148, 0.005, { key: 'passthru'});
 			filter.bits.should.equal(1632);
 			filter.hashes.should.equal(8);
 			filter.key.should.equal('passthru');
@@ -61,7 +61,7 @@ describe('StorableFilter()', function()
 	{
 		it('sets the specified bit', function(done)
 		{
-			StorableFilter.createOrRead({ key: 'test' }, function(err, filter)
+			RedisFilter.createOrRead({ key: 'test' }, function(err, filter)
 			{
 				should.not.exist(err);
 				filter.should.be.an('object');
@@ -80,7 +80,7 @@ describe('StorableFilter()', function()
 
 		it('sets the specified bitlist', function(done)
 		{
-			StorableFilter.createOrRead({ key: 'test' }, function(err, filter)
+			RedisFilter.createOrRead({ key: 'test' }, function(err, filter)
 			{
 				should.not.exist(err);
 				filter.should.be.an('object');
@@ -109,7 +109,7 @@ describe('StorableFilter()', function()
 	{
 		it('can store buffers', function(done)
 		{
-			StorableFilter.createOrRead({ key: 'test' }, function(err, filter)
+			RedisFilter.createOrRead({ key: 'test' }, function(err, filter)
 			{
 				var buff = new Buffer('cat');
 				filter.add(buff, function(err)
@@ -127,7 +127,7 @@ describe('StorableFilter()', function()
 
 		it('can store strings', function(done)
 		{
-			StorableFilter.createOrRead({ key: 'test' }, function(err, filter)
+			RedisFilter.createOrRead({ key: 'test' }, function(err, filter)
 			{
 				filter.add('cat', function(err)
 				{
@@ -144,7 +144,7 @@ describe('StorableFilter()', function()
 
 		it('can store arrays of buffers or strings', function(done)
 		{
-			StorableFilter.createOrRead({ key: 'test' }, function(err, filter)
+			RedisFilter.createOrRead({ key: 'test' }, function(err, filter)
 			{
 				filter.add(['cat', 'dog', new Buffer('wallaby')], function(err)
 				{
@@ -176,7 +176,7 @@ describe('StorableFilter()', function()
 			for (var i = 0; i < 100; i++)
 				wordlist.push(randomWord());
 
-			StorableFilter.createOrRead({ key: 'test' }, function(err, filter)
+			RedisFilter.createOrRead({ key: 'test' }, function(err, filter)
 			{
 				filter.add(wordlist, function(err)
 				{
@@ -196,7 +196,7 @@ describe('StorableFilter()', function()
 	{
 		it('clears all set bits', function(done)
 		{
-			StorableFilter.createOrRead({ key: 'test' }, function(err, filter)
+			RedisFilter.createOrRead({ key: 'test' }, function(err, filter)
 			{
 				should.not.exist(err);
 				filter.redis.hvals(filter.key, function(err, initial)
@@ -222,7 +222,7 @@ describe('StorableFilter()', function()
 	{
 		it('can delete a filter', function(done)
 		{
-			var filter = new StorableFilter({key: 'passthru'});
+			var filter = new RedisFilter({key: 'passthru'});
 			filter.del(function(err)
 			{
 				should.not.exist(err);
@@ -232,7 +232,7 @@ describe('StorableFilter()', function()
 
 		it('deletes the relevant keys in redis', function(done)
 		{
-			StorableFilter.createOrRead({ key: 'test' }, function(err, filter)
+			RedisFilter.createOrRead({ key: 'test' }, function(err, filter)
 			{
 				should.not.exist(err);
 				filter.del(function(err)
@@ -246,7 +246,7 @@ describe('StorableFilter()', function()
 						{
 							should.not.exist(err);
 							exists.should.equal(0);
-							done();							
+							done();
 						});
 					});
 				});
