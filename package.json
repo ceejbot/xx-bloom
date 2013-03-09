@@ -27,9 +27,12 @@
 	},
 	"dependencies":
 	{
-		"hiredis": "*",
 		"redis": "*",
 		"xxhash": "*"
+	},
+	"optionalDependencies":
+	{
+		"hiredis": "*"
 	},
 	"author": "C J Silverio <ceejceej@gmail.com>",
 	"license": "MIT"
