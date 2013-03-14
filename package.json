@@ -27,11 +27,11 @@
 	},
 	"dependencies":
 	{
-		"redis": "*",
 		"xxhash": "*"
 	},
 	"optionalDependencies":
 	{
+		"redis": "*",
 		"hiredis": "*"
 	},
 	"author": "C J Silverio <ceejceej@gmail.com>",
