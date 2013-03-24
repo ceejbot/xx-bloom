@@ -33,6 +33,18 @@ describe('CountingFilter()', function()
 		filter.buffer.length.should.equal(filter.bits);
 	});
 
+	it('uses passed-in seeds if provided', function()
+	{
+		var filter = new CountingFilter({
+			bits: 32,
+			seeds: [ 1, 2, 3, 4, 5, 6, 7 ]
+		});
+		assert.equal(filter.hashes, 7);
+		assert.equal(filter.seeds.length, 7);
+		assert.equal(filter.seeds[0], 1);
+		assert.equal(filter.seeds[6], 7);
+	});
+
 	it('zeroes out its storage buffer', function()
 	{
 		var filter = new CountingFilter();

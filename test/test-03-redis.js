@@ -46,6 +46,39 @@ describe('RedisFilter()', function()
 		});
 	});
 
+	describe('initialize()', function()
+	{
+		it('reads a stored filter from redis', function(done)
+		{
+			var filter = new RedisFilter({key: 'test'});
+			filter.initialize(function(err, isNew)
+			{
+				should.not.exist(err);
+				isNew.should.equal(false);
+				filter.bits.should.equal(1632);
+				filter.hashes.should.equal(8);
+				filter.seeds.length.should.equal(8);
+				filter.key.should.equal('test');
+				done();
+			});
+		});
+
+		it('writes metadata if it did not previously exist', function(done)
+		{
+			var filter = RedisFilter.createOptimal(400, 0.005, { key: 'bigtest'});
+			filter.initialize(function(err, isNew)
+			{
+				should.not.exist(err);
+				isNew.should.equal(true);
+				filter.bits.should.equal(4411);
+				filter.hashes.should.equal(8);
+				filter.seeds.length.should.equal(8);
+				filter.key.should.equal('bigtest');
+				done();
+			});
+		});
+	});
+
 	describe('createOptimal()', function()
 	{
 		it('returns something of the right size', function()
@@ -129,10 +162,10 @@ describe('RedisFilter()', function()
 		{
 			RedisFilter.createOrRead({ key: 'test' }, function(err, filter)
 			{
-				filter.add('cat', function(err)
+				filter.add('dog', function(err)
 				{
 					should.not.exist(err);
-					filter.has('cat', function(err, has)
+					filter.has('dog', function(err, has)
 					{
 						should.not.exist(err);
 						has.should.be.ok;
@@ -146,15 +179,29 @@ describe('RedisFilter()', function()
 		{
 			RedisFilter.createOrRead({ key: 'test' }, function(err, filter)
 			{
-				filter.add(['cat', 'dog', new Buffer('wallaby')], function(err)
+				filter.add(['mongoose', 'cow', new Buffer('wallaby')], function(err)
 				{
 					should.not.exist(err);
-					filter.has('cat', function(err, has)
+					filter.has('wallaby', function(err, has)
 					{
 						should.not.exist(err);
 						has.should.be.ok;
 						done();
 					});
+				});
+			});
+		});
+
+		it('returns false (mostly) for items not in the filter', function(done)
+		{
+			RedisFilter.createOrRead({ key: 'test' }, function(err, filter)
+			{
+				should.not.exist(err);
+				filter.has('kumquat', function(err, found)
+				{
+					should.not.exist(err);
+					found.should.equal(false);
+					done();
 				});
 			});
 		});
@@ -176,16 +223,24 @@ describe('RedisFilter()', function()
 			for (var i = 0; i < 100; i++)
 				wordlist.push(randomWord());
 
-			RedisFilter.createOrRead({ key: 'test' }, function(err, filter)
+			RedisFilter.createOrRead({ key: 'bigtest' }, function(err, filter)
 			{
 				filter.add(wordlist, function(err)
 				{
 					should.not.exist(err);
+
 					filter.has(wordlist[50], function(err, has)
 					{
 						should.not.exist(err);
 						has.should.be.ok;
-						done();
+
+						filter.has(wordlist[66], function(err, has)
+						{
+							should.not.exist(err);
+							has.should.be.ok;
+
+							done();
+						});
 					});
 				});
 			});
@@ -254,5 +309,14 @@ describe('RedisFilter()', function()
 		});
 	});
 
+	after(function(done)
+	{
+		var filter = new RedisFilter({key: 'bigtest'});
+		filter.del(function(err)
+		{
+			should.not.exist(err);
+			done();
+		});
+	});
 
 });

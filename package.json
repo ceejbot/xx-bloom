@@ -1,6 +1,6 @@
 {
 	"name": "bloomxx",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"description": "bloom filters backed by xxhash",
 	"main": "index.js",
 	"directories":
@@ -8,7 +8,17 @@
 		"test": "./test",
 		"lib": "./lib"
 	},
-	"scripts": { "test": "mocha -R spec test/*.js" },
+	"scripts": 
+	{
+		"test": "mocha -R spec test/*.js && mocha --require blanket -R travis-cov test/*.js",
+		"test-cov": "mocha --require blanket -R travis-cov test/*.js",
+		"coverage": "mocha --require blanket -R html-cov test/*.js > test/coverage.html",
+		"blanket":
+		{
+			"pattern": "//^((?!\/node_modules\/)(?!\/test\/)(?!\/examples\/).)*$/ig"
+		},
+		"travis-cov": { "threshold": 90 }
+	},
 	"repository": "git://github.com/ceejbot/xx-bloom.git",
 	"bugs": "https://github.com/ceejbot/xx-bloom/issues",
 	"keywords":
@@ -23,7 +33,9 @@
 	"devDependencies":
 	{
 		"chai": "*",
-		"mocha": "*"
+		"mocha": "*",
+		"blanket": "*",
+		"travis-cov": "*"
 	},
 	"dependencies":
 	{
