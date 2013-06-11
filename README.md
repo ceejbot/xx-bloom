@@ -2,7 +2,7 @@ Yet another Bloom filter implementation for node.js. Everybody has to write one,
 
 To install: `npm install bloomxx`
 
-[![Build Status](https://secure.travis-ci.org/ceejbot/xx-bloom.png)](http://travis-ci.org/ceejbot/xx-bloom)
+[![Build Status](https://secure.travis-ci.org/ceejbot/xx-bloom.png)](http://travis-ci.org/ceejbot/xx-bloom) [![Dependencies](https://david-dm.org/ceejbot/xx-bloom.png)](https://david-dm.org/ceejbot/xx-bloom) [![NPM version](https://badge.fury.io/js/bloomxx.png)](http://badge.fury.io/js/bloomxx)
 
 ## Usage
 
