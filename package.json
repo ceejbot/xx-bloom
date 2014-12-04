@@ -12,13 +12,15 @@
 	{
 		"test": "mocha -R spec test/*.js && mocha --require blanket -R travis-cov test/*.js",
 		"test-cov": "mocha --require blanket -R travis-cov test/*.js",
-		"coverage": "mocha --require blanket -R html-cov test/*.js > test/coverage.html",
-		"blanket":
-		{
-			"pattern": "//^((?!\/node_modules\/)(?!\/test\/)(?!\/examples\/).)*$/ig"
-		},
-		"travis-cov": { "threshold": 90 }
+		"coverage": "mocha --require blanket -R html-cov test/*.js > test/coverage.html"
 	},
+  "config":
+  {
+    "blanket": {
+			"pattern": "//^((?!\/node_modules\/)(?!\/test\/)(?!\/examples\/).)*$/ig"
+    },
+		"travis-cov": { "threshold": 90 }
+  },
 	"repository": "git://github.com/ceejbot/xx-bloom.git",
 	"bugs": "https://github.com/ceejbot/xx-bloom/issues",
 	"keywords":
