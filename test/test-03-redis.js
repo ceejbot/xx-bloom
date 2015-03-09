@@ -6,7 +6,7 @@ var
 	expect = chai.expect,
 	should = chai.should(),
 	RedisFilter = require('../lib/redis'),
-	redis = require('redis')
+	redis = require('redis').createClient();
 	;
 
 describe('RedisFilter()', function()
@@ -19,7 +19,8 @@ describe('RedisFilter()', function()
 			RedisFilter.createOrRead({
 				key: 'test',
 				bits: 1632,
-				hashes: 8
+				hashes: 8,
+                redis: redis
 			}, function(err, filter)
 			{
 				should.not.exist(err);
@@ -33,7 +34,8 @@ describe('RedisFilter()', function()
 
 		it('can read the stored filter from redis', function(done)
 		{
-			RedisFilter.createOrRead({ key: 'test' }, function(err, filter)
+			RedisFilter.createOrRead({ key: 'test',
+                redis: redis }, function(err, filter)
 			{
 				should.not.exist(err);
 				filter.should.be.an('object');
@@ -50,7 +52,8 @@ describe('RedisFilter()', function()
 	{
 		it('reads a stored filter from redis', function(done)
 		{
-			var filter = new RedisFilter({key: 'test'});
+			var filter = new RedisFilter({key: 'test',
+                redis: redis});
 			filter.initialize(function(err, isNew)
 			{
 				should.not.exist(err);
@@ -65,7 +68,8 @@ describe('RedisFilter()', function()
 
 		it('writes metadata if it did not previously exist', function(done)
 		{
-			var filter = RedisFilter.createOptimal(400, 0.005, { key: 'bigtest'});
+			var filter = RedisFilter.createOptimal(400, 0.005, { key: 'bigtest',
+                redis: redis});
 			filter.initialize(function(err, isNew)
 			{
 				should.not.exist(err);
@@ -83,7 +87,8 @@ describe('RedisFilter()', function()
 	{
 		it('returns something of the right size', function()
 		{
-			var filter = RedisFilter.createOptimal(148, 0.005, { key: 'passthru'});
+			var filter = RedisFilter.createOptimal(148, 0.005, { key: 'passthru',
+                redis: redis});
 			filter.bits.should.equal(1632);
 			filter.hashes.should.equal(8);
 			filter.key.should.equal('passthru');
@@ -94,7 +99,8 @@ describe('RedisFilter()', function()
 	{
 		it('sets the specified bit', function(done)
 		{
-			RedisFilter.createOrRead({ key: 'test' }, function(err, filter)
+			RedisFilter.createOrRead({ key: 'test',
+                redis: redis }, function(err, filter)
 			{
 				should.not.exist(err);
 				filter.should.be.an('object');
@@ -113,7 +119,8 @@ describe('RedisFilter()', function()
 
 		it('sets the specified bitlist', function(done)
 		{
-			RedisFilter.createOrRead({ key: 'test' }, function(err, filter)
+			RedisFilter.createOrRead({ key: 'test',
+                redis: redis }, function(err, filter)
 			{
 				should.not.exist(err);
 				filter.should.be.an('object');
@@ -142,7 +149,8 @@ describe('RedisFilter()', function()
 	{
 		it('can store buffers', function(done)
 		{
-			RedisFilter.createOrRead({ key: 'test' }, function(err, filter)
+			RedisFilter.createOrRead({ key: 'test',
+                redis: redis }, function(err, filter)
 			{
 				var buff = new Buffer('cat');
 				filter.add(buff, function(err)
@@ -160,7 +168,8 @@ describe('RedisFilter()', function()
 
 		it('can store strings', function(done)
 		{
-			RedisFilter.createOrRead({ key: 'test' }, function(err, filter)
+			RedisFilter.createOrRead({ key: 'test',
+                redis: redis }, function(err, filter)
 			{
 				filter.add('dog', function(err)
 				{
@@ -177,7 +186,8 @@ describe('RedisFilter()', function()
 
 		it('can store arrays of buffers or strings', function(done)
 		{
-			RedisFilter.createOrRead({ key: 'test' }, function(err, filter)
+			RedisFilter.createOrRead({ key: 'test',
+                redis: redis }, function(err, filter)
 			{
 				filter.add(['mongoose', 'cow', new Buffer('wallaby')], function(err)
 				{
@@ -194,7 +204,8 @@ describe('RedisFilter()', function()
 
 		it('returns false (mostly) for items not in the filter', function(done)
 		{
-			RedisFilter.createOrRead({ key: 'test' }, function(err, filter)
+			RedisFilter.createOrRead({ key: 'test',
+                redis: redis }, function(err, filter)
 			{
 				should.not.exist(err);
 				filter.has('kumquat', function(err, found)
@@ -223,7 +234,8 @@ describe('RedisFilter()', function()
 			for (var i = 0; i < 100; i++)
 				wordlist.push(randomWord());
 
-			RedisFilter.createOrRead({ key: 'bigtest' }, function(err, filter)
+			RedisFilter.createOrRead({ key: 'bigtest',
+                redis: redis }, function(err, filter)
 			{
 				filter.add(wordlist, function(err)
 				{
@@ -251,7 +263,8 @@ describe('RedisFilter()', function()
 	{
 		it('clears all set bits', function(done)
 		{
-			RedisFilter.createOrRead({ key: 'test' }, function(err, filter)
+			RedisFilter.createOrRead({ key: 'test',
+                redis: redis }, function(err, filter)
 			{
 				should.not.exist(err);
 				filter.redis.hvals(filter.key, function(err, initial)
@@ -277,7 +290,8 @@ describe('RedisFilter()', function()
 	{
 		it('can delete a filter', function(done)
 		{
-			var filter = new RedisFilter({key: 'passthru'});
+			var filter = new RedisFilter({key: 'passthru',
+                redis: redis});
 			filter.del(function(err)
 			{
 				should.not.exist(err);
@@ -287,7 +301,8 @@ describe('RedisFilter()', function()
 
 		it('deletes the relevant keys in redis', function(done)
 		{
-			RedisFilter.createOrRead({ key: 'test' }, function(err, filter)
+			RedisFilter.createOrRead({ key: 'test',
+                redis: redis }, function(err, filter)
 			{
 				should.not.exist(err);
 				filter.del(function(err)
@@ -311,7 +326,8 @@ describe('RedisFilter()', function()
 
 	after(function(done)
 	{
-		var filter = new RedisFilter({key: 'bigtest'});
+		var filter = new RedisFilter({key: 'bigtest',
+            redis: redis});
 		filter.del(function(err)
 		{
 			should.not.exist(err);
