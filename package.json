@@ -39,7 +39,8 @@
 	},
 	"dependencies":
 	{
-		"xxhash": "*"
+		"xxhash": "~0.2.3",
+		"mmap-io": "~0.9.4"
 	},
 	"optionalDependencies":
 	{
