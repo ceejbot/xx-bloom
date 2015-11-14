@@ -39,12 +39,8 @@
 	},
 	"dependencies":
 	{
-		"xxhash": "*"
-	},
-	"optionalDependencies":
-	{
-		"redis": "*",
-		"hiredis": "*"
+		"xxhash": "~0.2.3",
+		"mmap-io": "~0.9.4"
 	},
 	"author": "C J Silverio <ceejceej@gmail.com>",
 	"license": "MIT"
