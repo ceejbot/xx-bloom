@@ -1,7 +1,7 @@
 {
   "name": "bloomxx",
   "description": "bloom filters backed by xxhash",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "author": "C J Silverio <ceejceej@gmail.com>",
   "bugs": "https://github.com/ceejbot/xx-bloom/issues",
   "dependencies": {
