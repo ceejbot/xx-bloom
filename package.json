@@ -1,51 +1,40 @@
 {
-	"name": "bloomxx",
-	"version": "0.0.2",
-	"description": "bloom filters backed by xxhash",
-	"main": "index.js",
-	"directories":
-	{
-		"test": "./test",
-		"lib": "./lib"
-	},
-	"scripts": 
-	{
-		"test": "mocha -R spec test/*.js && mocha --require blanket -R travis-cov test/*.js",
-		"test-cov": "mocha --require blanket -R travis-cov test/*.js",
-		"coverage": "mocha --require blanket -R html-cov test/*.js > test/coverage.html",
-		"blanket":
-		{
-			"pattern": "//^((?!\/node_modules\/)(?!\/test\/)(?!\/examples\/).)*$/ig"
-		},
-		"travis-cov": { "threshold": 90 }
-	},
-	"repository": "git://github.com/ceejbot/xx-bloom.git",
-	"bugs": "https://github.com/ceejbot/xx-bloom/issues",
-	"keywords":
-	[
-		"bloom",
-		"bloom-filter",
-		"counting-filter",
-		"hash",
-		"bitmap",
-		"xxhash"
-	],
-	"devDependencies":
-	{
-		"chai": "*",
-		"mocha": "*",
-		"blanket": "*",
-		"travis-cov": "*"
-	},
-	"dependencies":
-	{
-		"xxhash": "*"
-	},
-	"optionalDependencies":
-	{
-		"redis": "*",
-		"hiredis": "*"
-	},
-	"author": "C J Silverio <ceejceej@gmail.com>",
-	"license": "MIT"
+  "name": "bloomxx",
+  "description": "bloom filters backed by xxhash",
+  "version": "0.0.2",
+  "author": "C J Silverio <ceejceej@gmail.com>",
+  "bugs": "https://github.com/ceejbot/xx-bloom/issues",
+  "dependencies": {
+    "xxhash": "~0.2.3"
+  },
+  "devDependencies": {
+    "eslint": "~1.10.3",
+    "mocha": "~2.3.4",
+    "must": "~0.13.1",
+    "nyc": "~4.0.1"
+  },
+  "directories": {
+    "test": "./test",
+    "lib": "./lib"
+  },
+  "keywords": [
+    "bitmap",
+    "bloom",
+    "bloom-filter",
+    "counting-filter",
+    "hash",
+    "xxhash"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "optionalDependencies": {
+    "hiredis": "~0.4.1",
+    "redis": "~2.4.2"
+  },
+  "repository": "git://github.com/ceejbot/xx-bloom.git",
+  "scripts": {
+    "lint": "eslint *.js lib/ test/",
+    "test": "nyc mocha -R spec test/*.js",
+    "travis": "npm run lint && npm test"
+  }
 }

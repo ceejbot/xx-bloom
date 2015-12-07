@@ -1,17 +1,12 @@
 /*global describe:true, it:true, before:true, after:true */
 
 var
-	chai = require('chai'),
-	assert = chai.assert,
-	expect = chai.expect,
-	should = chai.should(),
-	RedisFilter = require('../lib/redis'),
-	redis = require('redis')
+	demand = require('must'),
+	RedisFilter = require('../lib/redis')
 	;
 
 describe('RedisFilter()', function()
 {
-
 	describe('createOrRead()', function()
 	{
 		it('responds with a filter with the specified options', function(done)
@@ -22,11 +17,11 @@ describe('RedisFilter()', function()
 				hashes: 8
 			}, function(err, filter)
 			{
-				should.not.exist(err);
-				filter.bits.should.equal(1632);
-				filter.hashes.should.equal(8);
-				filter.seeds.length.should.equal(8);
-				filter.key.should.equal('test');
+				demand(err).not.exist();
+				filter.bits.must.equal(1632);
+				filter.hashes.must.equal(8);
+				filter.seeds.length.must.equal(8);
+				filter.key.must.equal('test');
 				done();
 			});
 		});
@@ -35,12 +30,12 @@ describe('RedisFilter()', function()
 		{
 			RedisFilter.createOrRead({ key: 'test' }, function(err, filter)
 			{
-				should.not.exist(err);
-				filter.should.be.an('object');
-				filter.bits.should.equal(1632);
-				filter.hashes.should.equal(8);
-				filter.seeds.length.should.equal(8);
-				filter.key.should.equal('test');
+				demand(err).not.exist();
+				filter.must.be.an.object();
+				filter.bits.must.equal(1632);
+				filter.hashes.must.equal(8);
+				filter.seeds.length.must.equal(8);
+				filter.key.must.equal('test');
 				done();
 			});
 		});
@@ -53,12 +48,12 @@ describe('RedisFilter()', function()
 			var filter = new RedisFilter({key: 'test'});
 			filter.initialize(function(err, isNew)
 			{
-				should.not.exist(err);
-				isNew.should.equal(false);
-				filter.bits.should.equal(1632);
-				filter.hashes.should.equal(8);
-				filter.seeds.length.should.equal(8);
-				filter.key.should.equal('test');
+				demand(err).not.exist();
+				isNew.must.equal(false);
+				filter.bits.must.equal(1632);
+				filter.hashes.must.equal(8);
+				filter.seeds.length.must.equal(8);
+				filter.key.must.equal('test');
 				done();
 			});
 		});
@@ -68,12 +63,12 @@ describe('RedisFilter()', function()
 			var filter = RedisFilter.createOptimal(400, 0.005, { key: 'bigtest'});
 			filter.initialize(function(err, isNew)
 			{
-				should.not.exist(err);
-				isNew.should.equal(true);
-				filter.bits.should.equal(4411);
-				filter.hashes.should.equal(8);
-				filter.seeds.length.should.equal(8);
-				filter.key.should.equal('bigtest');
+				demand(err).not.exist();
+				isNew.must.equal(true);
+				filter.bits.must.equal(4411);
+				filter.hashes.must.equal(8);
+				filter.seeds.length.must.equal(8);
+				filter.key.must.equal('bigtest');
 				done();
 			});
 		});
@@ -84,9 +79,9 @@ describe('RedisFilter()', function()
 		it('returns something of the right size', function()
 		{
 			var filter = RedisFilter.createOptimal(148, 0.005, { key: 'passthru'});
-			filter.bits.should.equal(1632);
-			filter.hashes.should.equal(8);
-			filter.key.should.equal('passthru');
+			filter.bits.must.equal(1632);
+			filter.hashes.must.equal(8);
+			filter.key.must.equal('passthru');
 		});
 	});
 
@@ -96,15 +91,15 @@ describe('RedisFilter()', function()
 		{
 			RedisFilter.createOrRead({ key: 'test' }, function(err, filter)
 			{
-				should.not.exist(err);
-				filter.should.be.an('object');
+				demand(err).not.exist();
+				filter.must.be.an.object();
 				filter.setbit(10, function(err)
 				{
-					should.not.exist(err);
+					demand(err).not.exist();
 					filter.getbit(10, function(err, val)
 					{
-						should.not.exist(err);
-						val.should.equal(true);
+						demand(err).not.exist();
+						val.must.equal(true);
 						done();
 					});
 				});
@@ -115,22 +110,22 @@ describe('RedisFilter()', function()
 		{
 			RedisFilter.createOrRead({ key: 'test' }, function(err, filter)
 			{
-				should.not.exist(err);
-				filter.should.be.an('object');
+				demand(err).not.exist();
+				filter.must.be.an.object();
 				filter.setbits([4, 10, 65, 78], function(err)
 				{
-					should.not.exist(err);
+					demand(err).not.exist();
 					filter.getbits([4, 10, 65, 78, 5, 11, 77, 64], function(err, values)
 					{
-						should.not.exist(err);
-						values[4].should.equal(true);
-						values[10].should.equal(true);
-						values[65].should.equal(true);
-						values[78].should.equal(true);
-						values[5].should.equal(false);
-						values[11].should.equal(false);
-						values[77].should.equal(false);
-						values[64].should.equal(false);
+						demand(err).not.exist();
+						values[4].must.equal(true);
+						values[10].must.equal(true);
+						values[65].must.equal(true);
+						values[78].must.equal(true);
+						values[5].must.equal(false);
+						values[11].must.equal(false);
+						values[77].must.equal(false);
+						values[64].must.equal(false);
 						done();
 					});
 				});
@@ -144,14 +139,15 @@ describe('RedisFilter()', function()
 		{
 			RedisFilter.createOrRead({ key: 'test' }, function(err, filter)
 			{
+				demand(err).not.exist();
 				var buff = new Buffer('cat');
 				filter.add(buff, function(err)
 				{
-					should.not.exist(err);
+					demand(err).not.exist();
 					filter.has(buff, function(err, has)
 					{
-						should.not.exist(err);
-						has.should.be.ok;
+						demand(err).not.exist();
+						has.must.be.ok;
 						done();
 					});
 				});
@@ -162,13 +158,14 @@ describe('RedisFilter()', function()
 		{
 			RedisFilter.createOrRead({ key: 'test' }, function(err, filter)
 			{
+				demand(err).not.exist();
 				filter.add('dog', function(err)
 				{
-					should.not.exist(err);
+					demand(err).not.exist();
 					filter.has('dog', function(err, has)
 					{
-						should.not.exist(err);
-						has.should.be.ok;
+						demand(err).not.exist();
+						has.must.be.ok;
 						done();
 					});
 				});
@@ -179,13 +176,14 @@ describe('RedisFilter()', function()
 		{
 			RedisFilter.createOrRead({ key: 'test' }, function(err, filter)
 			{
+				demand(err).not.exist();
 				filter.add(['mongoose', 'cow', new Buffer('wallaby')], function(err)
 				{
-					should.not.exist(err);
+					demand(err).not.exist();
 					filter.has('wallaby', function(err, has)
 					{
-						should.not.exist(err);
-						has.should.be.ok;
+						demand(err).not.exist();
+						has.must.be.ok;
 						done();
 					});
 				});
@@ -196,11 +194,11 @@ describe('RedisFilter()', function()
 		{
 			RedisFilter.createOrRead({ key: 'test' }, function(err, filter)
 			{
-				should.not.exist(err);
+				demand(err).not.exist();
 				filter.has('kumquat', function(err, found)
 				{
-					should.not.exist(err);
-					found.should.equal(false);
+					demand(err).not.exist();
+					found.must.equal(false);
 					done();
 				});
 			});
@@ -225,19 +223,20 @@ describe('RedisFilter()', function()
 
 			RedisFilter.createOrRead({ key: 'bigtest' }, function(err, filter)
 			{
+				demand(err).not.exist();
 				filter.add(wordlist, function(err)
 				{
-					should.not.exist(err);
+					demand(err).not.exist();
 
 					filter.has(wordlist[50], function(err, has)
 					{
-						should.not.exist(err);
-						has.should.be.ok;
+						demand(err).not.exist();
+						has.must.be.ok;
 
 						filter.has(wordlist[66], function(err, has)
 						{
-							should.not.exist(err);
-							has.should.be.ok;
+							demand(err).not.exist();
+							has.must.be.ok;
 
 							done();
 						});
@@ -253,18 +252,18 @@ describe('RedisFilter()', function()
 		{
 			RedisFilter.createOrRead({ key: 'test' }, function(err, filter)
 			{
-				should.not.exist(err);
+				demand(err).not.exist();
 				filter.redis.hvals(filter.key, function(err, initial)
 				{
-					should.not.exist(err);
+					demand(err).not.exist();
 					filter.clear(function(err)
 					{
-						should.not.exist(err);
+						demand(err).not.exist();
 						filter.redis.hvals(filter.key, function(err, cleared)
 						{
-							should.not.exist(err);
-							initial.should.not.equal(cleared);
-							cleared[0].should.eql('0');
+							demand(err).not.exist();
+							initial.must.not.equal(cleared);
+							cleared[0].must.eql('0');
 							done();
 						});
 					});
@@ -280,7 +279,7 @@ describe('RedisFilter()', function()
 			var filter = new RedisFilter({key: 'passthru'});
 			filter.del(function(err)
 			{
-				should.not.exist(err);
+				demand(err).not.exist();
 				done();
 			});
 		});
@@ -289,18 +288,18 @@ describe('RedisFilter()', function()
 		{
 			RedisFilter.createOrRead({ key: 'test' }, function(err, filter)
 			{
-				should.not.exist(err);
+				demand(err).not.exist();
 				filter.del(function(err)
 				{
-					should.not.exist(err);
+					demand(err).not.exist();
 					filter.redis.exists('test', function(err, exists)
 					{
-						should.not.exist(err);
-						exists.should.equal(0);
+						demand(err).not.exist();
+						exists.must.equal(0);
 						filter.redis.exists('test:meta', function(err, exists)
 						{
-							should.not.exist(err);
-							exists.should.equal(0);
+							demand(err).not.exist();
+							exists.must.equal(0);
 							done();
 						});
 					});
@@ -314,7 +313,7 @@ describe('RedisFilter()', function()
 		var filter = new RedisFilter({key: 'bigtest'});
 		filter.del(function(err)
 		{
-			should.not.exist(err);
+			demand(err).not.exist();
 			done();
 		});
 	});
