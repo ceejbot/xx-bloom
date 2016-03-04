@@ -11,7 +11,7 @@
     "eslint": "2.*",
     "mocha": "2.*",
     "must": "~0.13.1",
-    "nyc": "5.*"
+    "nyc": "6.0.0"
   },
   "directories": {
     "test": "./test",
