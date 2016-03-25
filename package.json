@@ -8,7 +8,7 @@
     "xxhash": "~0.2.3"
   },
   "devDependencies": {
-    "eslint": "2.*",
+    "eslint": "2.5.0",
     "mocha": "2.*",
     "must": "~0.13.1",
     "nyc": "6.0.0"
