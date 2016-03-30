@@ -5,10 +5,11 @@
   "author": "C J Silverio <ceejceej@gmail.com>",
   "bugs": "https://github.com/ceejbot/xx-bloom/issues",
   "dependencies": {
+    "eslint": "~2.5.3",
     "xxhash": "~0.2.3"
   },
   "devDependencies": {
-    "eslint": "2.*",
+    "eslint": "2.5.0",
     "mocha": "2.*",
     "must": "~0.13.1",
     "nyc": "6.1.1"
