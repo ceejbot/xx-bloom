@@ -5,6 +5,7 @@
   "author": "C J Silverio <ceejceej@gmail.com>",
   "bugs": "https://github.com/ceejbot/xx-bloom/issues",
   "dependencies": {
+    "eslint": "~2.5.3",
     "xxhash": "~0.2.3"
   },
   "devDependencies": {
