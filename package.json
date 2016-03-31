@@ -8,10 +8,10 @@
     "xxhash": "~0.2.3"
   },
   "devDependencies": {
-    "eslint": "2.*",
-    "mocha": "2.*",
+    "eslint": "~2.5",
+    "mocha": "~2.4",
     "must": "~0.13.1",
-    "nyc": "6.1.1"
+    "nyc": "~6.1"
   },
   "directories": {
     "test": "./test",
@@ -29,7 +29,7 @@
   "main": "index.js",
   "optionalDependencies": {
     "hiredis": "~0.4.1",
-    "redis": "~2.5.2"
+    "redis": "~2.6.0-0"
   },
   "repository": "git://github.com/ceejbot/xx-bloom.git",
   "scripts": {
