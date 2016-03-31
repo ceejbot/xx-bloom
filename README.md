@@ -2,7 +2,7 @@ Yet another Bloom filter implementation for node.js. Everybody has to write one,
 
 To install: `npm install bloomxx`
 
-[![on npm](https://img.shields.io/npm/v/avon.svg?style=flat)](https://www.npmjs.com/package/bloomxx) [![Build Status](http://img.shields.io/travis/ceejbot/bloomxx/master.svg?style=flat)](https://travis-ci.org/ceejbot/bloomxx) [![Coverage Status](https://img.shields.io/coveralls/ceejbot/bloomxx.svg?style=flat)](https://coveralls.io/github/ceejbot/bloomxx?branch=master)
+[![on npm](https://img.shields.io/npm/v/bloomxx.svg?style=flat)](https://www.npmjs.com/package/bloomxx) [![Build Status](http://img.shields.io/travis/ceejbot/xx-bloom/master.svg?style=flat)](https://travis-ci.org/ceejbot/xx-bloom) [![Coverage Status](https://img.shields.io/coveralls/ceejbot/xx-bloom.svg?style=flat)](https://coveralls.io/github/ceejbot/xx-bloom?branch=master)
 
 ## Usage
 
