@@ -8,6 +8,7 @@
     "xxhash": "~0.2.3"
   },
   "devDependencies": {
+    "coveralls": "~2.11.9",
     "eslint": "~2.5",
     "mocha": "~2.4",
     "must": "~0.13.1",
@@ -33,6 +34,7 @@
   },
   "repository": "git://github.com/ceejbot/xx-bloom.git",
   "scripts": {
+    "coverage": "nyc report --reporter=text-lcov | coveralls",
     "lint": "eslint *.js lib/ test/",
     "test": "nyc mocha -R spec test/*.js",
     "travis": "npm run lint && npm test"

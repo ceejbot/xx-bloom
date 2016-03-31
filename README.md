@@ -2,9 +2,7 @@ Yet another Bloom filter implementation for node.js. Everybody has to write one,
 
 To install: `npm install bloomxx`
 
-[![NPM](http://nodei.co/npm/bloomxx.png)](http://nodei.co/npm/bloomxx/)
-
-[![Build Status](https://secure.travis-ci.org/ceejbot/xx-bloom.png)](http://travis-ci.org/ceejbot/xx-bloom) [![Dependencies](https://david-dm.org/ceejbot/xx-bloom.png)](https://david-dm.org/ceejbot/xx-bloom) 
+[![on npm](https://img.shields.io/npm/v/avon.svg?style=flat)](https://www.npmjs.com/package/bloomxx) [![Build Status](http://img.shields.io/travis/ceejbot/bloomxx/master.svg?style=flat)](https://travis-ci.org/ceejbot/bloomxx) [![Coverage Status](https://img.shields.io/coveralls/ceejbot/bloomxx.svg?style=flat)](https://coveralls.io/github/ceejbot/bloomxx?branch=master)
 
 ## Usage
 
@@ -115,6 +113,6 @@ Clear all bits.
 
 Delete the filter from redis.
 
-## Licence 
+## Licence
 
 MIT.
