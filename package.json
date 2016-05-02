@@ -12,7 +12,7 @@
     "eslint": "~2.8.0",
     "mocha": "~2.4",
     "must": "~0.13.1",
-    "nyc": "~6.2.1"
+    "nyc": "~6.4.2"
   },
   "directories": {
     "test": "./test",
