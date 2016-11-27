@@ -29,7 +29,7 @@ describe('CountingFilter()', function()
 	{
 		var filter = new CountingFilter({
 			bits: 32,
-			seeds: [ 1, 2, 3, 4, 5, 6, 7 ]
+			seeds: [1, 2, 3, 4, 5, 6, 7]
 		});
 		filter.hashes.must.equal(7);
 		filter.seeds.length.must.equal(7);
