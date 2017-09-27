@@ -31,7 +31,6 @@ describe('CountingFilter()', function()
 			bits: 32,
 			seeds: [1, 2, 3, 4, 5, 6, 7]
 		});
-		filter.hashes.must.equal(7);
 		filter.seeds.length.must.equal(7);
 		filter.seeds[0].must.equal(1);
 		filter.seeds[6].must.equal(7);
@@ -50,7 +49,7 @@ describe('CountingFilter()', function()
 		{
 			var filter = CountingFilter.createOptimal(95);
 			filter.bits.must.equal(1048);
-			filter.hashes.must.equal(8);
+			filter.seeds.length.must.equal(8);
 			filter.buffer.length.must.equal(filter.bits);
 		});
 	});

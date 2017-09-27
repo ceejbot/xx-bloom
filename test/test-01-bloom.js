@@ -34,7 +34,6 @@ describe('BloomFilter()', function()
 	it('uses passed-in seeds if provided', function()
 	{
 		var filter = new BloomFilter({ bits: 256, seeds: [1, 2, 3, 4, 5]});
-		filter.hashes.must.equal(5);
 		filter.seeds.length.must.equal(5);
 		filter.seeds[0].must.equal(1);
 		filter.seeds[4].must.equal(5);
@@ -46,15 +45,15 @@ describe('BloomFilter()', function()
 		{
 			var filter = BloomFilter.createOptimal(95);
 			filter.bits.must.equal(1048);
-			filter.hashes.must.equal(8);
+			filter.seeds.length.must.equal(8);
 
 			filter = BloomFilter.createOptimal(148);
 			filter.bits.must.equal(1632);
-			filter.hashes.must.equal(8);
+			filter.seeds.length.must.equal(8);
 
 			filter = BloomFilter.createOptimal(10);
 			filter.bits.must.equal(110);
-			filter.hashes.must.equal(8);
+			filter.seeds.length.must.equal(8);
 		});
 
 		it('createOptimal() lets you specify an error rate', function()
@@ -189,14 +188,14 @@ describe('BloomFilter()', function()
 			filter.add('cat');
 
 			hasBitsSet(filter.buffer).must.equal(1);
-			filter.has('cat').must.be.ok;
+			filter.has('cat').must.be.true();
 		});
 
 		it('returns false for items not in the set (mostly)', function()
 		{
 			var filter = new BloomFilter({ hashes: 4, bits: 50 });
 			filter.add('cat');
-			filter.has('dog').must.not.be.ok;
+			filter.has('dog').must.be.false();
 		});
 
 		it('responds appropriately for arrays of added items', function()
@@ -224,4 +223,50 @@ describe('BloomFilter()', function()
 		});
 	});
 
+	describe('wireline format', function()
+	{
+		it('toBuffer() returns a buffer', function()
+		{
+			var filter = new BloomFilter({ hashes: 3, bits: 128 });
+			filter.add(['cat', 'dog', 'wallaby']);
+			var buf = filter.toBuffer();
+
+			buf.readUInt16LE(0).must.equal(128);
+			buf.readUInt8(2).must.equal(3);
+			buf.readUInt32LE(3).must.equal(filter.seeds[0]);
+			buf.readUInt32LE(7).must.equal(filter.seeds[1]);
+			buf.readUInt32LE(11).must.equal(filter.seeds[2]);
+
+			for (var i = 0; i < filter.buffer.length; i++)
+			{
+				buf[i + 15].must.equal(filter.buffer[i]);
+			}
+		});
+
+		it('fromBuffer() reconstructs the filter', function()
+		{
+			var filter = new BloomFilter({ hashes: 3, bits: 128 });
+			filter.add(['cat', 'dog', 'wallaby']);
+			var buf = filter.toBuffer();
+
+			var copy = new BloomFilter(buf);
+
+			copy.bits.must.equal(filter.bits);
+			copy.seeds.length.must.equal(filter.seeds.length);
+
+			for (var i = 0; i < filter.seeds.length; i++)
+			{
+				copy.seeds[i].must.equal(filter.seeds[i]);
+			}
+
+			var cmp = copy.buffer.compare(filter.buffer);
+			cmp.must.equal(0);
+
+			const animals = ['cat', 'dog', 'wallaby', 'wombat', 'frog', 'quokka'];
+			animals.forEach(a =>
+			{
+				copy.has(a).must.equal(filter.has(a));
+			});
+		});
+	});
 });

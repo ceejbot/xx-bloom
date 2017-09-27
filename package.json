@@ -3,23 +3,27 @@
   "description": "bloom filters backed by xxhash",
   "version": "0.0.5",
   "author": "C J Silverio <ceejceej@gmail.com>",
-  "bugs": "https://github.com/ceejbot/xx-bloom/issues",
+  "bugs": {
+    "url": "https://github.com/ceejbot/xx-bloom/issues"
+  },
   "dependencies": {
-    "redis": "~2.6.3",
+    "hiredis": "~0.5.0",
+    "redis": "~2.6.0",
     "xxhash": "~0.2.4"
   },
   "devDependencies": {
-    "coveralls": "~2.11.15",
-    "eslint-config-ceejbot": "~1.0.3",
-    "mocha": "~3.2.0",
-    "must": "~0.13.2",
-    "nyc": "~10.0.0",
-    "xo": "~0.17.1"
+    "coveralls": "~2.13.1",
+    "eslint-config-ceejbot": "~1.1.0",
+    "mocha": "~3.5.3",
+    "must": "~0.13.4",
+    "nyc": "~11.2.1",
+    "xo": "~0.18.2"
   },
   "directories": {
-    "test": "./test",
-    "lib": "./lib"
+    "lib": "lib",
+    "test": "test"
   },
+  "homepage": "https://github.com/ceejbot/xx-bloom#readme",
   "keywords": [
     "bitmap",
     "bloom",
@@ -34,7 +38,10 @@
     "hiredis": "~0.5.0",
     "redis": "~2.6.0"
   },
-  "repository": "git://github.com/ceejbot/xx-bloom.git",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/ceejbot/xx-bloom.git"
+  },
   "scripts": {
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "lint": "xo",
@@ -42,6 +49,9 @@
     "travis": "npm run lint && npm test"
   },
   "xo": {
-    "extends": "eslint-config-ceejbot"
+    "extends": "eslint-config-ceejbot",
+    "rules": {
+      "prefer-arrow-callback": 0
+    }
   }
 }
